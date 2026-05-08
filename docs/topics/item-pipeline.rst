@@ -338,6 +338,7 @@ the item from reaching subsequent pipeline components:
         adapter = ItemAdapter(item)
         adapter["price"] = float(adapter["price"].strip("£"))
 
+
     # Correct
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
