@@ -287,7 +287,7 @@ Each yielded item is processed by the enabled pipelines in order of their priori
     from scrapy.exceptions import DropItem
 
     class PriceValidationPipeline:
-        def process_item(self, item, spider):
+        def process_item(self, item):
             adapter = ItemAdapter(item)
             if not adapter.get("price"):
                 raise DropItem(f"Missing price in: {item!r}")
@@ -334,13 +334,13 @@ the item from reaching subsequent pipeline components:
 .. code-block:: python
 
     # Wrong — returns None implicitly
-    def process_item(self, item, spider):
+    def process_item(self, item):
         adapter = ItemAdapter(item)
         adapter["price"] = float(adapter["price"].strip("£"))
 
 
     # Correct
-    def process_item(self, item, spider):
+    def process_item(self, item):
         adapter = ItemAdapter(item)
         adapter["price"] = float(adapter["price"].strip("£"))
         return item
@@ -371,12 +371,12 @@ lifecycle to the crawl, not to class instantiation:
 .. code-block:: python
 
     class DatabasePipeline:
-        def open_spider(self, spider):
+        def open_spider(self):
             self.conn = db.connect()
 
-        def close_spider(self, spider):
+        def close_spider(self):
             self.conn.close()
 
-        def process_item(self, item, spider):
+        def process_item(self, item):
             self.conn.insert(ItemAdapter(item).asdict())
             return item
